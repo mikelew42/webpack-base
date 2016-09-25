@@ -38,7 +38,7 @@ var createConstructor = function(name){
 	if (!(this instanceof " + name + "))\r\n\
 		return new (" + name + ".bind.apply(" + name + ", prepArgs(arguments)));\r\n\
 	this.id = ++nextID;\r\n\
-	if (o && o.config) this.config = o.config;\r\n\
+	if (o && o.config) { this.config = o.config; delete o.config; }\r\n\
 	this.config && this.config();\r\n\
 	this.set.apply(this, arguments);\r\n\
 	this.init && this.init();\r\n\

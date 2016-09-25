@@ -27,7 +27,7 @@ var setProp = function(obj, arg, name){
 	if (is.undef(obj[name])) // obj.prop is undefined
 		obj[name] = arg;
 	else if (obj[name].set)
-		obj[name].set.apply(obj[name], arg); // pass to obj.prop.set()
+		obj[name].set.call(obj[name], arg); // pass to obj.prop.set()
 	else if (is.obj(obj[name]) && is.obj(arg)) // recursively set
 		setOne(obj[name], arg)
 	else if (is.fn(obj[name])){ // if obj.prop is fn
