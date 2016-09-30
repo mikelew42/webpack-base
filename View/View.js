@@ -21,4 +21,16 @@ var View = Base.extend("View", {
 	}
 });
 
+var aliasFnToEl = function(fn){
+	return function(){
+		this.$el[fn].apply(this.$el, arguments);
+		return this;
+	};
+};
+
+[	'append', 'prepend', 'click', /* 'clickOff',*/ 'show', 'hide', 'appendTo', 'prependTo', 'addClass', 'removeClass', 
+	'css', 'attr', 'remove', 'empty', 'hasClass', 'html'].forEach(function(v){
+		View.prototype[v] = aliasFnToEl(v);
+});
+
 module.exports = View;

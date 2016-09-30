@@ -44,7 +44,7 @@ var is = {
 		return typeof value === 'function';
 	},
 	sfn: function(value){
-		return is.fn(value) && value.Base;
+		return is.fn(value) && value.main;
 	},
 	def: function(value){
 		return typeof value !== 'undefined';

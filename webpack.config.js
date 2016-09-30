@@ -21,7 +21,7 @@ module.exports = {
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
       { test: /\.useable\.css$/, loader: "style/useable!css" },
       { test: /\.less$/, loader: "style!css!less" },
-      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=20000&minetype=application/font-woff&name=/[hash].[ext]" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
     ]
   }
