@@ -1,6 +1,8 @@
 require("../jasmine");
 require("logger");
 
+var instantiate = require("../Module/instantiate");
+
 var Base = require("./Base");
 
 // Base.log = true;
@@ -233,9 +235,10 @@ describe("Sfn", function(){
 	it("a potential pattern for Sfn", function(){
 		// So you don't have to access the base prototype to copy it...
 		var test = {},
-			MySfn = function(){
-				var mySfn = Sfn({
-					name: "mySfn",
+			Ext = Base.extend({
+				instantiate: instantiate,
+				mySfn: Sfn({
+					// name: "mySfn",
 					main: function(arg){
 						this.mySfn.sub1.apply(this, arguments);
 						this.mySfn.sub2(this, arg);
@@ -251,29 +254,29 @@ describe("Sfn", function(){
 					sub3: function(){
 						test.sub3 = 1;
 					}
-				});
-				mySfn.assign.apply(mySfn, arguments);
-				return mySfn;
-			},
-			Ext = Base.extend({
-				mySfn: MySfn()
+				})
 			});
 
 
 		var ext = Ext();
 		expect(typeof ext.mySfn).toBe("function");
 		// expect(ext.mySfn.sub3).toBe(MySfn().sub3); // nope - it creates all new fns
+		expect(typeof ext.mySfn.sub3).toBe("function");
+		expect(ext.mySfn).toBe(Ext.prototype.mySfn);
 
+		expect(test.sub3).not.toBe(1);
 		ext.mySfn();
 		expect(test.sub3).toBe(1);
 
 		var ext2 = Ext({
-			mySfn: MySfn({
+			mySfn: {
 				sub3: function(){
 					test.sub3 = 2;
 				}
-			})
+			}
 		});
+		expect(ext2.mySfn).not.toBe(Ext.prototype.mySfn);
+
 		ext2.mySfn();
 		expect(test.sub3).toBe(2);
 
@@ -281,8 +284,52 @@ describe("Sfn", function(){
 		ext.mySfn();
 		expect(test.sub3).toBe(1);
 
-		var Ext2 = Ext.extend({
+		test.sub3 = false;
 
+		var Ext2 = Ext.extend();
+		expect(Ext2.prototype.mySfn).not.toBe(Ext.prototype.mySfn);
+		
+		var ext3 = Ext2();
+		expect(ext3.mySfn).toBe(Ext2.prototype.mySfn);
+		ext3.mySfn();
+		expect(test.sub3).toBe(1);
+
+		var ext4 = Ext2({
+			mySfn: { sub3: function(){ test.sub3 = 3; } }
 		});
+		expect(ext4.mySfn).not.toBe(Ext2.prototype.mySfn);
+
+		ext4.mySfn();
+		expect(test.sub3).toBe(3);
+
+		ext3.mySfn();
+		expect(test.sub3).toBe(1);
+
+		var Ext3 = Ext.extend({
+			mySfn: {
+				sub3: function(){
+					test.sub3 = 4;
+				}
+			}
+		});
+
+		expect(Ext3.prototype.mySfn).not.toBe(Ext.prototype.mySfn);
+
+		var ext5 = Ext3();
+		expect(ext5.mySfn).toBe(Ext3.prototype.mySfn);
+
+		ext5.mySfn();
+		expect(test.sub3).toBe(4);
+
+		ext.mySfn();
+		expect(test.sub3).toBe(1);
+
+		var ext6 = Ext3({
+			mySfn: { sub3: function(){ test.sub3 = 5; } }
+		});
+		expect(ext6.mySfn).not.toBe(Ext3.prototype.mySfn);
+
+		ext6.mySfn();
+		expect(test.sub3).toBe(5);
 	});
 });

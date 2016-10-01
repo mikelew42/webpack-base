@@ -16,13 +16,13 @@ Instead of just value.copy(), we need copy(value)?
 Honestly, this is pretty heavy... It would be way more performant to hard-code only the properties needed.  This will be possible with code gen.
 */
 
-var instantiate = module.exports = function(){
+var instantiate = module.exports = function(proto){
 	for (var i in this){
 		if (i[0] === "$")
 			continue;
 		if (this[i]){
-			// natural sfn shouldn't need reinstantiation
-			if (this[i].copy && !is.sfn(this[i])) {
+			// natural sfn shouldn't need reinstantiation, unless its a prototype
+			if (this[i].copy && (!is.sfn(this[i]) || proto)) {
 				this[i] = this[i].copy();
 			} else if (this[i] instanceof Base){
 				console.warn("potentially dangerous use of sub modules");

@@ -14,6 +14,11 @@ var extend = function(o){
 	Ext.base = this;
 	Ext.prototype.type = name[0].toLowerCase() + name.substring(1);
 
+	if (o && o.instantiate){
+		Ext.prototype.instantiate = o.instantiate;
+		delete o.instantiate;
+	}
+	Ext.prototype.instantiate && Ext.prototype.instantiate.call(Ext.prototype, true);
 	Ext.prototype.set.apply(Ext.prototype, arguments);
 
 	// log("Created new class: ", Ext);

@@ -6,8 +6,7 @@ var reference = module.exports = function(){
 	for (var i = 0; i < arguments.length; i++){
 		for (var j in arguments[i]){
 			this[j] = arguments[i][j];
-			this.doNotCopy = this.doNotCopy || [];
-			this.doNotCopy.push(j);
+			this.props[j] = "doNotCopy";
 		}
 	}
 };
