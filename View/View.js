@@ -8,7 +8,8 @@ $(function(){
 	// var $body = $("body").addClass("light");
 });
 
-var View = Base.extend("View", {
+var View = Base.extend({
+	name: "View",
 	init: function(){
 		this.render();
 		this.insert();

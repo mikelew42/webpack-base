@@ -111,6 +111,18 @@ Instrumentation:  Several possible ways to bind to the qfn:
 		});
 	})
 }
+ 
+
+If we go the .main -> .exec/.set combo, the easiest way is to just check arguments.length, and route any/all args to .set.
+
+Can we just use a Sfn?  
+.main is called with parent ctx, so .exec and .set would be also.  But, that means that .set and .exec need to be passed the Qfn directly...   God damn, that's ugly.
+
+
+Or maybe we just get into instantiating sfns on every instance, and binding to it?  I was already planning to "install" / "setup" modules.
+
+If we restrict the use of these "Qfn" to fns where we know the name, it could work.  Or, the Qfn installs it at the named property?
+
 
 
 
